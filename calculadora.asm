@@ -1,0 +1,10 @@
+soma:
+subtrai
+multiplica:
+divide:
+potencia:
+raizq:
+tabuada:
+imc:
+fatorial:
+fibonnacci:
