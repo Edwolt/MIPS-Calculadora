@@ -13,8 +13,11 @@ msg_sym4:       .asciiz " x "
 msg_sym5:       .asciiz " / "
 msg_sym6:       .asciiz "!"
 msg_sym7:       .asciiz " ^ "
-msg_resp1:       .asciiz "A raiz quadrada de "
-msg_resp2:       .asciiz " é igual a "
+msg_resp1:      .asciiz "A raiz quadrada de "
+msg_resp2:      .asciiz " é igual a "
+msg_fim:        .asciiz "Fim\n\n"
+msg_space:          .asciiz ", "
+     
 	.align 2
 zeroAsFloat:  .float 0.0 
 
@@ -39,9 +42,9 @@ menu:
 	beq $v0, 5, potencia
 	beq $v0, 6, raiz
 	beq $v0, 7, tabuada
-	beq $v0, 8, divisao
+	beq $v0, 8, imc
 	beq $v0, 9, fatorial
-	beq $v0, 10, raiz
+	beq $v0, 10, fibonacci
 	beq $v0, 0, sair
 
 	j menu
@@ -240,6 +243,27 @@ fatorial:
 
 fibonacci:
 	jal ler_num1
+	move $s0, $v0
+	addi $s0, $s0, -1
+	
+	# i = 0
+        li $t0, 0
+        li $t1, 0
+        li $a0, 1
+          
+          while:
+                bgt $t0, $s0, exit
+                jal print_result_fib
+                move $t3, $a0
+                add $a0, $a0, $t1
+                move $t1, $t3
+                addi $t0, $t0, 1      # i++ or i = i + 1
+                
+                j while
+          exit:
+               li $v0, 4
+               la $a0, msg_fim
+               syscall
 
 	j menu
 
@@ -435,48 +459,6 @@ print_result_div:
 	
 	jr $ra
 	
-# Imprime resultado do fatorial
-print_result_fat:
-	# Salva $a0 em $t0 pois $a0 será usado
-	move $t0, $a0
-	
-	# Empilha
-	subi $sp, $sp, 8
-	sw $ra, 4($sp)
-	sw $a0, 0($sp)
-
-	# Imprime o primeiro numero
-	li $v0, 1
-        move $a0, $a1
-        syscall
-        
-        # Imprime o simbolo de operacao
-	li $v0, 4
-        la $a0, msg_sym6
-        syscall
-        
-        # Imprime o simbolo de igualdade
-	li $v0, 4
-        la $a0, msg_sym1
-        syscall
-        
-        # Imprime o resultado
-        li $v0, 1
-        move $a0, $t0
-        syscall
-        
-        # Imprime espaço vazio
-        li $v0, 4
-        la $a0, msg_nn
-        syscall
-        
-        # Desempilha
-	lw $a0, 0($sp)
-	lw $ra, 4($sp)
-	addi $sp, $sp, 8
-	
-	jr $ra
-
 print_result_pot:
 	# Salva $a0 em $t0 pois $a0 será usado
 	move $t0, $a0
@@ -568,6 +550,75 @@ print_result_raiz:
 	addi $sp, $sp, 8
 	
 	jr $ra
+	
+	
+# Imprime resultado do fatorial
+print_result_fat:
+	# Salva $a0 em $t0 pois $a0 será usado
+	move $t0, $a0
+	
+	# Empilha
+	subi $sp, $sp, 8
+	sw $ra, 4($sp)
+	sw $a0, 0($sp)
+
+	# Imprime o primeiro numero
+	li $v0, 1
+        move $a0, $a1
+        syscall
+        
+        # Imprime o simbolo de operacao
+	li $v0, 4
+        la $a0, msg_sym6
+        syscall
+        
+        # Imprime o simbolo de igualdade
+	li $v0, 4
+        la $a0, msg_sym1
+        syscall
+        
+        # Imprime o resultado
+        li $v0, 1
+        move $a0, $t0
+        syscall
+        
+        # Imprime espaço vazio
+        li $v0, 4
+        la $a0, msg_nn
+        syscall
+        
+        # Desempilha
+	lw $a0, 0($sp)
+	lw $ra, 4($sp)
+	addi $sp, $sp, 8
+	
+	jr $ra
+
+
+print_result_fib:
+        # Salva $a0 em $t5 pois $a0 será usado
+	move $t5, $a0
+	
+	# Empilha
+	subi $sp, $sp, 8
+	sw $ra, 4($sp)
+	sw $a0, 0($sp)
+	
+        li $v0, 1
+        add $a0, $zero, $t5
+        syscall
+          
+        li $v0, 4
+        la $a0, msg_space
+        syscall
+        
+        # Desempilha
+	lw $a0, 0($sp)
+	lw $ra, 4($sp)
+	addi $sp, $sp, 8
+          
+        jr $ra
+
 
 # Le um número e retorna para o $v0
 ler_num1:
