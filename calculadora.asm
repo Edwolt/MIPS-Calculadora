@@ -207,15 +207,14 @@ tabuada:
 	        
 imc:
 	jal ler_massa
-	lwc1 $f1, zeroAsFloat
-	add.s $f2, $f0, $f1
+	mov.s $f1, $f0
 	 
 	jal ler_alt
-	add.s $f3, $f0, $f1
+	mov.s $f2, $f0
 	
-	mul.s $f4, $f3, $f3
+	mul.s $f3, $f2, $f2
 	
-	div.s $f5, $f2, $f4
+	div.s $f4, $f1, $f3
 	
 	# Display message
         li $v0, 4
@@ -223,8 +222,8 @@ imc:
         syscall
 	
 	# Display value
-        li    $v0, 2
-        add.s $f12, $f1, $f5
+        li $v0, 2
+        mov.s $f12, $f4
         syscall
         
         # Display message
@@ -612,7 +611,7 @@ print_result_fib:
 	sw $a0, 0($sp)
 	
         li $v0, 1
-        add $a0, $zero, $t5
+        move $a0, $t5
         syscall
 
         # Desempilha
