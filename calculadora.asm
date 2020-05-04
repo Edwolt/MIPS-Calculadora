@@ -55,14 +55,12 @@ menu:
 	
 soma:
 	jal ler_num1        
-	move $s0, $v0
+	move $a1, $v0
 
 	jal ler_num2
-	move $s1, $v0
+	move $a2, $v0
 
-        add $a0, $s0, $s1
-        move $a1, $s0
-        move $a2, $s1
+        add $a0, $a1, $a2
 
 	jal print_result_sum
 
@@ -70,14 +68,12 @@ soma:
 
 subtracao:
 	jal ler_num1
-	move $s0, $v0
+	move $a1, $v0
 
 	jal ler_num2
-	move $s1, $v0
+	move $a2, $v0
 
-	sub $a0, $s0, $s1
-	move $a1, $s0
-        move $a2, $s1
+	sub $a0, $a1, $a2
 
 	jal print_result_sub
 
@@ -85,21 +81,17 @@ subtracao:
 
 multiplicacao:
 	jal ler_num1
-	move $s0, $v0
+	move $a1, $v0
 
 	jal ler_num2
-	move $s1, $v0
+	move $a2, $v0
 
-	mult $s0, $s1
+	mult $a1, $a2
 	mflo $a0
-	
-	move $a1, $s0
-        move $a2, $s1
 
 	jal print_result_mul
 	
-	# Imprime espaço vazio
-        li $v0, 4
+	li $v0, 4
         la $a0, msg_n
         syscall
 
@@ -107,15 +99,13 @@ multiplicacao:
 
 divisao:
         jal ler_num1
-        move $s0, $v0
+        move $a1, $v0
 
 	jal ler_num2
-	move $s1, $v0
+	move $a2, $v0
 
-	div $s0, $s1
+	div $a1, $a2
 	mflo $a0
-	move $a1, $s0
-        move $a2, $s1
 
 	jal print_result_div
 
@@ -131,18 +121,22 @@ potencia:
 	# i = 0
         li $t0, 1
         li $a0, 1
-          
+        
+        # while(!($t0 > $s1))
 	potencia_while:
 		bgt $t0, $s1, potencia_while_fim
+		
 		mult $a0, $s0
 		mflo $a0
-		addi $t0, $t0, 1      # i++ or i = i + 1
+		
+		addi $t0, $t0, 1      # $t0++ ou $t0 = $t0 + 1
                 
 		j potencia_while
-          potencia_while_fim:
-               move $a1, $s0
-               move $a2, $s1
-               jal print_result_pot
+	potencia_while_fim:
+
+	move $a1, $s0
+	move $a2, $s1
+	jal print_result_pot
 
 	j menu
 
@@ -181,20 +175,21 @@ raiz:
 tabuada:
 	jal ler_num1
 	move $s0, $v0
-	move $t2, $zero
+	move $s1, $zero
 	move $a1, $s0
 	
-	# for(t2 = 0, !(t2 > 10, t2++)
+	# Estou usando s1 como iterador para o seu valor não ser sobrescrito com a chamada de função
+	# for($s1 = 0, !($s1 > 10, $s1++)
 	tabuada_loop_t2:
-	        bgt $t2, 10, tabuada_loop_t2_fim
+	        bgt $s1, 10, tabuada_loop_t2_fim
 	        
-		mult $s0, $t2
+		mult $s0, $s1
 		mflo $a0
-                move $a2, $t2
+                move $a2, $s1
                 
                 jal print_result_mul
 
-		addi $t2, $t2, 1
+		addi $s1, $s1, 1   # $s1++
 		
 		j tabuada_loop_t2
 		
@@ -236,8 +231,8 @@ imc:
 fatorial:
 	jal ler_num1
 
-	move $t0, $v0
-	move $a1, $v0
+	move $t0, $v0 # iterador
+ 	move $a1, $v0
 	
 	li $a0, 1   # Resultado do fatorial
 
@@ -259,12 +254,10 @@ fatorial:
 fibonacci:
 	jal ler_num1
 	move $s0, $v0
-	addi $s0, $s0, -1
 	
 	# i = 0
-        li $t0, 0
-        li $t1, 0
-	li $a0, 1
+        li $s1, 1
+	li $s2, 0
 	
 	# Começa o while, mas pula a impressão do ", "
 	j fibonacci_while_start
@@ -272,13 +265,15 @@ fibonacci:
         fibonacci_while:
         	jal print_space       #imprime ", "
 	fibonacci_while_start:
+                move $a0, $s1
                 jal print_result_fib
-                move $t3, $a0
-                add $a0, $a0, $t1
-                move $t1, $t3
-                addi $t0, $t0, 1      # i++ or i = i + 1
+
+                move $t3, $s1
+                add $s1, $s1, $s2
+                move $s2, $t3
                 
-                bgt $t0, $s0, fibonacci_while_exit
+                subi $s0, $s0, 1
+                beqz $s0, fibonacci_while_exit
 		j fibonacci_while
 	fibonacci_while_exit:
 	
@@ -296,13 +291,14 @@ sair:
 ##### Funções #####
 ###################
 
-# Imprime resultado da soma
+# Imprime resultado da soma $a1 + $a2 = $a0
 print_result_sum:
 	# Salva $a0 em $t0 pois $a0 será usado
 	move $t0, $a0
 	
 	# Empilha
-	subi $sp, $sp, 4
+	subi $sp, $sp, 8
+	sw $v0, 4($sp)
 	sw $a0, 0($sp)
 
 	# Imprime o primeiro numero
@@ -337,17 +333,19 @@ print_result_sum:
         
         # Desempilha
 	lw $a0, 0($sp)
-	addi $sp, $sp, 4
+	lw $v0, 4($sp)
+	addi $sp, $sp, 8
 	
 	jr $ra
 
-# Imprime resultado da subtração
+# Imprime resultado da subtração $a1 - $a2 = $a0
 print_result_sub:
 	# Salva $a0 em $t0 pois $a0 será usado
 	move $t0, $a0
 	
 	# Empilha
-	subi $sp, $sp, 4
+	subi $sp, $sp, 8
+	sw $v0, 4($sp)
 	sw $a0, 0($sp)
 
 	# Imprime o primeiro numero
@@ -382,17 +380,19 @@ print_result_sub:
         
         # Desempilha
 	lw $a0, 0($sp)
-	addi $sp, $sp, 4
+	lw $v0, 4($sp)
+	addi $sp, $sp, 8
 	
 	jr $ra
 
-# Imprime resultado da multiplicação
+# Imprime resultado da multiplicação $a1 * $a2 = $a0
 print_result_mul:
 	# Salva $a0 em $t0 pois $a0 será usado
 	move $t0, $a0
 	
 	# Empilha
-	subi $sp, $sp, 4
+	subi $sp, $sp, 8
+	sw $v0, 4($sp)
 	sw $a0, 0($sp)
 
 	# Imprime o primeiro numero
@@ -427,17 +427,19 @@ print_result_mul:
         
         # Desempilha
 	lw $a0, 0($sp)
-	addi $sp, $sp, 4
+	lw $v0, 4($sp)
+	addi $sp, $sp, 8
 	
 	jr $ra
 	
-# Imprime resultado da divisão
+# Imprime resultado da divisão $a1 / $a2 = $a0
 print_result_div:
 	# Salva $a0 em $t0 pois $a0 será usado
 	move $t0, $a0
 	
 	# Empilha
-	subi $sp, $sp, 4
+	subi $sp, $sp, 8
+	sw $v0, 4($sp)
 	sw $a0, 0($sp)
 
 	# Imprime o primeiro numero
@@ -472,17 +474,19 @@ print_result_div:
         
         # Desempilha
 	lw $a0, 0($sp)
-	addi $sp, $sp, 4
+	lw $v0, 4($sp)
+	addi $sp, $sp, 8
 	
 	jr $ra
 
-# Imprime o resultado da potência
+# Imprime o resultado da potência $a1 ^ $a2 = $a0
 print_result_pot:
 	# Salva $a0 em $t0 pois $a0 será usado
 	move $t0, $a0
 	
 	# Empilha
-	subi $sp, $sp, 4
+	subi $sp, $sp, 8
+	sw $v0, 4($sp)
 	sw $a0, 0($sp)
 
 	# Imprime o primeiro numero
@@ -517,56 +521,11 @@ print_result_pot:
         
         # Desempilha
 	lw $a0, 0($sp)
-	addi $sp, $sp, 4
+	lw $v0, 4($sp)
+	addi $sp, $sp, 8
 	
 	jr $ra
 
-# Imprime o resultado da raiz
-print_result_raiz:
-	# Salva $a0 em $t0 pois $a0 será usado
-	move $t0, $a0
-	
-	# Empilha
-	subi $sp, $sp, 4
-	sw $a0, 0($sp)
-
-	# Imprime o primeiro numero
-	li $v0, 1
-        move $a0, $a1
-        syscall
-        
-        # Imprime o simbolo de operacao
-	li $v0, 4
-        la $a0, msg_sym_pot
-        syscall
-        
-        # Imprime o segundo numero
-	li $v0, 1
-        move $a0, $a2
-        syscall
-        
-        # Imprime o simbolo de igualdade
-	li $v0, 4
-        la $a0, msg_sym_eq
-        syscall
-        
-        # Imprime o resultado
-        li $v0, 1
-        move $a0, $t0
-        syscall
-        
-        # Imprime espaço vazio
-        li $v0, 4
-        la $a0, msg_nn
-        syscall
-        
-        # Desempilha
-	lw $a0, 0($sp)
-	addi $sp, $sp, 4
-	
-	jr $ra
-	
-	
 # Imprime resultado do fatorial
 print_result_fat:
 	# Salva $a0 em $t0 pois $a0 será usado
@@ -608,22 +567,11 @@ print_result_fat:
 	jr $ra
 
 
-print_result_fib:
-        # Salva $a0 em $t5 pois $a0 será usado
-	move $t5, $a0
-	
-	# Empilha
-	subi $sp, $sp, 4
-	sw $a0, 0($sp)
-	
+print_result_fib:	
         li $v0, 1
-        move $a0, $t5
+        move $a0, $t0
         syscall
 
-        # Desempilha
-	lw $a0, 0($sp)
-	addi $sp, $sp, 4
-          
         jr $ra
 
 print_space:
@@ -674,7 +622,8 @@ ler_num2:
 	addi $sp, $sp, 4
 	
 	jr $ra
-	
+
+# le um float e retorna para $f0	
 ler_float:
 	li $v0, 4
         la $a0, msg_float
@@ -684,7 +633,8 @@ ler_float:
         syscall
 
 	jr $ra
-	
+
+# le uma massa (float) e retorna para $f0	
 ler_massa:
 	li $v0, 4
         la $a0, msg_massa
@@ -695,7 +645,8 @@ ler_massa:
 
 	
 	jr $ra
-	
+
+# le uma altura (float) e retorna para $f0
 ler_alt:
 	li $v0, 4
         la $a0, msg_alt
