@@ -18,11 +18,7 @@ msg_sym6:       .asciiz "!"
 msg_sym7:       .asciiz " ^ "
 msg_resp1:      .asciiz "A raiz quadrada de "
 msg_resp2:      .asciiz " é igual a "
-msg_fim:        .asciiz "Fim\n\n"
 msg_space:          .asciiz ", "
-     
-	.align 2
-zeroAsFloat:  .float 0.0 
 
 	.text
 	.globl main 
@@ -148,7 +144,6 @@ potencia:
 raiz:
 	jal ler_float
 	
-	lwc1 $f2, zeroAsFloat
 	sqrt.s $f1, $f0
 	
 	# Imprime uma frase
@@ -158,7 +153,7 @@ raiz:
 	
 	# Display value
     	li    $v0, 2
-     	add.s $f12, $f0, $f2
+     	mov.s $f12, $f0
      	syscall
      	
      	# Imprime uma frase
@@ -168,7 +163,7 @@ raiz:
         
         # Display value
     	li    $v0, 2
-     	add.s $f12, $f1, $f2
+     	mov.s $f12, $f1
      	syscall
         
      	# Imprime espaço vazio
