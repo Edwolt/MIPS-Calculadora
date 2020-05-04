@@ -10,14 +10,14 @@ msg_icmc:       .asciiz "O IMC é igual a: "
 msg_n:		.asciiz "\n"
 msg_nn:		.asciiz "\n\n"
 msg_sym_eq:       .asciiz " = "
-msg_sym_plus:       .asciiz " + "
-msg_sym3:       .asciiz " - "
-msg_sym4:       .asciiz " x "
-msg_sym5:       .asciiz " / "
-msg_sym6:       .asciiz "!"
-msg_sym7:       .asciiz " ^ "
-msg_resp1:      .asciiz "A raiz quadrada de "
-msg_resp2:      .asciiz " é igual a "
+msg_sym_sum:       .asciiz " + "
+msg_sym_menos:       .asciiz " - "
+msg_sym_mul:       .asciiz " x "
+msg_sym_div:       .asciiz " / "
+msg_sym_fat:       .asciiz "!"
+msg_sym_pot:       .asciiz " ^ "
+msg_res_raiz:      .asciiz "A raiz quadrada de "
+msg_res_igual:      .asciiz " é igual a "
 msg_space:          .asciiz ", "
 
 	.text
@@ -46,7 +46,12 @@ menu:
 	beq $v0, 10, fibonacci
 	beq $v0, 0, sair
 
-	j menu
+	j menu   # Caso não seja nenhuma das opções, volta para o menu
+
+
+##########################
+##### Opções do Menu #####
+##########################
 	
 soma:
 	jal ler_num1        
@@ -148,7 +153,7 @@ raiz:
 	
 	# Imprime uma frase
         li $v0, 4
-        la $a0, msg_resp1
+        la $a0, msg_res_raiz
         syscall
 	
 	# Display value
@@ -158,7 +163,7 @@ raiz:
      	
      	# Imprime uma frase
         li $v0, 4
-        la $a0, msg_resp2
+        la $a0, msg_res_igual
         syscall
         
         # Display value
@@ -287,6 +292,10 @@ sair:
 	li $v0, 10
 	syscall
 
+###################
+##### Funções #####
+###################
+
 # Imprime resultado da soma
 print_result_sum:
 	# Salva $a0 em $t0 pois $a0 será usado
@@ -303,7 +312,7 @@ print_result_sum:
         
         # Imprime o simbolo de operacao
 	li $v0, 4
-        la $a0, msg_sym_plus
+        la $a0, msg_sym_sum
         syscall
         
         # Imprime o segundo numero
@@ -332,7 +341,7 @@ print_result_sum:
 	
 	jr $ra
 
-# Imprime resultado da subtracao
+# Imprime resultado da subtração
 print_result_sub:
 	# Salva $a0 em $t0 pois $a0 será usado
 	move $t0, $a0
@@ -348,7 +357,7 @@ print_result_sub:
         
         # Imprime o simbolo de operacao
 	li $v0, 4
-        la $a0, msg_sym3
+        la $a0, msg_sym_menos
         syscall
         
         # Imprime o segundo numero
@@ -377,7 +386,7 @@ print_result_sub:
 	
 	jr $ra
 
-# Imprime resultado da multiplicacao
+# Imprime resultado da multiplicação
 print_result_mul:
 	# Salva $a0 em $t0 pois $a0 será usado
 	move $t0, $a0
@@ -393,7 +402,7 @@ print_result_mul:
         
         # Imprime o simbolo de operacao
 	li $v0, 4
-        la $a0, msg_sym4
+        la $a0, msg_sym_mul
         syscall
         
         # Imprime o segundo numero
@@ -422,7 +431,7 @@ print_result_mul:
 	
 	jr $ra
 	
-# Imprime resultado da divisao
+# Imprime resultado da divisão
 print_result_div:
 	# Salva $a0 em $t0 pois $a0 será usado
 	move $t0, $a0
@@ -438,7 +447,7 @@ print_result_div:
         
         # Imprime o simbolo de operacao
 	li $v0, 4
-        la $a0, msg_sym5
+        la $a0, msg_sym_div
         syscall
         
         # Imprime o segundo numero
@@ -466,7 +475,8 @@ print_result_div:
 	addi $sp, $sp, 4
 	
 	jr $ra
-	
+
+# Imprime o resultado da potência
 print_result_pot:
 	# Salva $a0 em $t0 pois $a0 será usado
 	move $t0, $a0
@@ -482,7 +492,7 @@ print_result_pot:
         
         # Imprime o simbolo de operacao
 	li $v0, 4
-        la $a0, msg_sym7
+        la $a0, msg_sym_pot
         syscall
         
         # Imprime o segundo numero
@@ -510,7 +520,8 @@ print_result_pot:
 	addi $sp, $sp, 4
 	
 	jr $ra
-	
+
+# Imprime o resultado da raiz
 print_result_raiz:
 	# Salva $a0 em $t0 pois $a0 será usado
 	move $t0, $a0
@@ -526,7 +537,7 @@ print_result_raiz:
         
         # Imprime o simbolo de operacao
 	li $v0, 4
-        la $a0, msg_sym7
+        la $a0, msg_sym_pot
         syscall
         
         # Imprime o segundo numero
@@ -572,7 +583,7 @@ print_result_fat:
         
         # Imprime o simbolo de operacao
 	li $v0, 4
-        la $a0, msg_sym6
+        la $a0, msg_sym_fat
         syscall
         
         # Imprime o simbolo de igualdade
