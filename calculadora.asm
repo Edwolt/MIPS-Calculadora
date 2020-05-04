@@ -265,21 +265,27 @@ fibonacci:
 	# i = 0
         li $t0, 0
         li $t1, 0
-        li $a0, 1
-          
-          while:
-                bgt $t0, $s0, exit
+	li $a0, 1
+	
+	# Começa o while, mas pula a impressão do ", "
+	j fibonacci_while_start
+	  
+        fibonacci_while:
+        	jal print_space       #imprime ", "
+	fibonacci_while_start:
                 jal print_result_fib
                 move $t3, $a0
                 add $a0, $a0, $t1
                 move $t1, $t3
                 addi $t0, $t0, 1      # i++ or i = i + 1
                 
-                j while
-          exit:
-               li $v0, 4
-               la $a0, msg_fim
-               syscall
+                bgt $t0, $s0, fibonacci_while_exit
+		j fibonacci_while
+	fibonacci_while_exit:
+	
+		li $v0, 4
+		la $a0, msg_nn
+		syscall
 
 	j menu
 
@@ -608,17 +614,27 @@ print_result_fib:
         li $v0, 1
         add $a0, $zero, $t5
         syscall
-          
-        li $v0, 4
-        la $a0, msg_space
-        syscall
-        
+
         # Desempilha
 	lw $a0, 0($sp)
 	addi $sp, $sp, 4
           
         jr $ra
 
+print_space:
+	# Empilha
+	subi $sp, $sp, 4
+	sw $a0, 0($sp)
+	
+	li $v0, 4
+        la $a0, msg_space
+        syscall
+	
+	# Desempilha
+	lw $a0, 0($sp)
+	addi $sp, $sp, 4
+	
+	jr $ra
 
 # Le um número e retorna para o $v0
 ler_num1:
