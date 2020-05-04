@@ -3,14 +3,14 @@
 msg_menu:	.asciiz "Escolha uma opção: \n1-Soma\n2-Subtração\n3-Multiplicação\n4-Divisão\n5-Potência\n6-Raiz Quadrada\n7-Tabuada\n8-IMC\n9-Fatorial\n10-Sequência de Fibonacci\n0-Sair\n"         
 msg_num1:	.asciiz "Digite um número inteiro:\n"
 msg_num2:	.asciiz "Digite outro número inteiro:\n"
-msg_num3:       .asciiz "Digite um número real:\n"
-msg_num4:       .asciiz "Digite a massa(Kg): \n"
-msg_num5:       .asciiz "Digite a altura(m): \n"
-msg_num6:       .asciiz "O IMC é igual a: "
+msg_float:       .asciiz "Digite um número real:\n"
+msg_massa:       .asciiz "Digite a massa(Kg): \n"
+msg_alt:       .asciiz "Digite a altura(m): \n"
+msg_icmc:       .asciiz "O IMC é igual a: "
 msg_n:		.asciiz "\n"
 msg_nn:		.asciiz "\n\n"
-msg_sym1:       .asciiz " = "
-msg_sym2:       .asciiz " + "
+msg_sym_eq:       .asciiz " = "
+msg_sym_plus:       .asciiz " + "
 msg_sym3:       .asciiz " - "
 msg_sym4:       .asciiz " x "
 msg_sym5:       .asciiz " / "
@@ -131,14 +131,14 @@ potencia:
         li $t0, 1
         li $a0, 1
           
-          while1:
-                bgt $t0, $s1, exit1
-                mult $a0, $s0
-                mflo $a0
-                addi $t0, $t0, 1      # i++ or i = i + 1
+	potencia_while:
+		bgt $t0, $s1, potencia_while_fim
+		mult $a0, $s0
+		mflo $a0
+		addi $t0, $t0, 1      # i++ or i = i + 1
                 
-                j while1
-          exit1:
+		j potencia_while
+          potencia_while_fim:
                move $a1, $s0
                move $a2, $s1
                jal print_result_pot
@@ -184,9 +184,9 @@ tabuada:
 	move $t2, $zero
 	move $a1, $s0
 	
-	# for(t0 = 0, t0 != 10, t0++)
-	loop_t2:
-	        bgt $t2, 10, loop_t2_fim
+	# for(t2 = 0, !(t2 > 10, t2++)
+	tabuada_loop_t2:
+	        bgt $t2, 10, tabuada_loop_t2_fim
 	        
 		mult $s0, $t2
 		mflo $a0
@@ -196,9 +196,9 @@ tabuada:
 
 		addi $t2, $t2, 1
 		
-		j loop_t2
+		j tabuada_loop_t2
 		
-	loop_t2_fim:
+	tabuada_loop_t2_fim:
 	        # Imprime espaço vazio
         	li $v0, 4
         	la $a0, msg_n
@@ -219,7 +219,7 @@ imc:
 	
 	# Display message
         li $v0, 4
-        la $a0, msg_num6
+        la $a0, msg_icmc
         syscall
 	
 	# Display value
@@ -243,15 +243,15 @@ fatorial:
 	li $a0, 1   # Resultado do fatorial
 
 	# for(t0 = a0, t0 != 0, t0--)
-	loop_t3:
+	fatorial_loop_t3:
 		mult $a0, $t0
 		mflo $a0
 
 		subi $t0, $t0, 1
 
-		beqz $t0, loop_t3_fim
-		j loop_t3
-	loop_t3_fim:
+		beqz $t0, fatorial_loop_t3_fim
+		j fatorial_loop_t3
+	fatorial_loop_t3_fim:
 
 	jal print_result_fat
 
@@ -304,7 +304,7 @@ print_result_sum:
         
         # Imprime o simbolo de operacao
 	li $v0, 4
-        la $a0, msg_sym2
+        la $a0, msg_sym_plus
         syscall
         
         # Imprime o segundo numero
@@ -314,7 +314,7 @@ print_result_sum:
         
         # Imprime o simbolo de igualdade
 	li $v0, 4
-        la $a0, msg_sym1
+        la $a0, msg_sym_eq
         syscall
         
         # Imprime o resultado
@@ -361,7 +361,7 @@ print_result_sub:
         
         # Imprime o simbolo de igualdade
 	li $v0, 4
-        la $a0, msg_sym1
+        la $a0, msg_sym_eq
         syscall
         
         # Imprime o resultado
@@ -408,7 +408,7 @@ print_result_mul:
         
         # Imprime o simbolo de igualdade
 	li $v0, 4
-        la $a0, msg_sym1
+        la $a0, msg_sym_eq
         syscall
         
         # Imprime o resultado
@@ -455,7 +455,7 @@ print_result_div:
         
         # Imprime o simbolo de igualdade
 	li $v0, 4
-        la $a0, msg_sym1
+        la $a0, msg_sym_eq
         syscall
         
         # Imprime o resultado
@@ -501,7 +501,7 @@ print_result_pot:
         
         # Imprime o simbolo de igualdade
 	li $v0, 4
-        la $a0, msg_sym1
+        la $a0, msg_sym_eq
         syscall
         
         # Imprime o resultado
@@ -547,7 +547,7 @@ print_result_raiz:
         
         # Imprime o simbolo de igualdade
 	li $v0, 4
-        la $a0, msg_sym1
+        la $a0, msg_sym_eq
         syscall
         
         # Imprime o resultado
@@ -590,7 +590,7 @@ print_result_fat:
         
         # Imprime o simbolo de igualdade
 	li $v0, 4
-        la $a0, msg_sym1
+        la $a0, msg_sym_eq
         syscall
         
         # Imprime o resultado
@@ -605,7 +605,6 @@ print_result_fat:
         
         # Desempilha
 	lw $a0, 0($sp)
-	lw $ra, 4($sp)
 	addi $sp, $sp, 8
 	
 	jr $ra
@@ -679,7 +678,7 @@ ler_float:
 	sw $ra, 0($sp)
 	
 	li $v0, 4
-        la $a0, msg_num3
+        la $a0, msg_float
         syscall
  
         li $v0, 6
@@ -695,7 +694,7 @@ ler_massa:
 	sw $ra, 0($sp)
 	
 	li $v0, 4
-        la $a0, msg_num4
+        la $a0, msg_massa
         syscall
  
         li $v0, 6
@@ -711,7 +710,7 @@ ler_alt:
 	sw $ra, 0($sp)
 	
 	li $v0, 4
-        la $a0, msg_num5
+        la $a0, msg_alt
         syscall
  
         li $v0, 6
