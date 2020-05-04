@@ -293,8 +293,7 @@ print_result_sum:
 	move $t0, $a0
 	
 	# Empilha
-	subi $sp, $sp, 8
-	sw $ra, 4($sp)
+	subi $sp, $sp, 4
 	sw $a0, 0($sp)
 
 	# Imprime o primeiro numero
@@ -329,8 +328,7 @@ print_result_sum:
         
         # Desempilha
 	lw $a0, 0($sp)
-	lw $ra, 4($sp)
-	addi $sp, $sp, 8
+	addi $sp, $sp, 4
 	
 	jr $ra
 
@@ -340,8 +338,7 @@ print_result_sub:
 	move $t0, $a0
 	
 	# Empilha
-	subi $sp, $sp, 8
-	sw $ra, 4($sp)
+	subi $sp, $sp, 4
 	sw $a0, 0($sp)
 
 	# Imprime o primeiro numero
@@ -376,8 +373,7 @@ print_result_sub:
         
         # Desempilha
 	lw $a0, 0($sp)
-	lw $ra, 4($sp)
-	addi $sp, $sp, 8
+	addi $sp, $sp, 4
 	
 	jr $ra
 
@@ -387,8 +383,7 @@ print_result_mul:
 	move $t0, $a0
 	
 	# Empilha
-	subi $sp, $sp, 8
-	sw $ra, 4($sp)
+	subi $sp, $sp, 4
 	sw $a0, 0($sp)
 
 	# Imprime o primeiro numero
@@ -423,8 +418,7 @@ print_result_mul:
         
         # Desempilha
 	lw $a0, 0($sp)
-	lw $ra, 4($sp)
-	addi $sp, $sp, 8
+	addi $sp, $sp, 4
 	
 	jr $ra
 	
@@ -434,8 +428,7 @@ print_result_div:
 	move $t0, $a0
 	
 	# Empilha
-	subi $sp, $sp, 8
-	sw $ra, 4($sp)
+	subi $sp, $sp, 4
 	sw $a0, 0($sp)
 
 	# Imprime o primeiro numero
@@ -470,8 +463,7 @@ print_result_div:
         
         # Desempilha
 	lw $a0, 0($sp)
-	lw $ra, 4($sp)
-	addi $sp, $sp, 8
+	addi $sp, $sp, 4
 	
 	jr $ra
 	
@@ -480,8 +472,7 @@ print_result_pot:
 	move $t0, $a0
 	
 	# Empilha
-	subi $sp, $sp, 8
-	sw $ra, 4($sp)
+	subi $sp, $sp, 4
 	sw $a0, 0($sp)
 
 	# Imprime o primeiro numero
@@ -516,8 +507,7 @@ print_result_pot:
         
         # Desempilha
 	lw $a0, 0($sp)
-	lw $ra, 4($sp)
-	addi $sp, $sp, 8
+	addi $sp, $sp, 4
 	
 	jr $ra
 	
@@ -526,8 +516,7 @@ print_result_raiz:
 	move $t0, $a0
 	
 	# Empilha
-	subi $sp, $sp, 8
-	sw $ra, 4($sp)
+	subi $sp, $sp, 4
 	sw $a0, 0($sp)
 
 	# Imprime o primeiro numero
@@ -562,8 +551,7 @@ print_result_raiz:
         
         # Desempilha
 	lw $a0, 0($sp)
-	lw $ra, 4($sp)
-	addi $sp, $sp, 8
+	addi $sp, $sp, 4
 	
 	jr $ra
 	
@@ -574,8 +562,7 @@ print_result_fat:
 	move $t0, $a0
 	
 	# Empilha
-	subi $sp, $sp, 8
-	sw $ra, 4($sp)
+	subi $sp, $sp, 4
 	sw $a0, 0($sp)
 
 	# Imprime o primeiro numero
@@ -605,7 +592,7 @@ print_result_fat:
         
         # Desempilha
 	lw $a0, 0($sp)
-	addi $sp, $sp, 8
+	addi $sp, $sp, 4
 	
 	jr $ra
 
@@ -615,8 +602,7 @@ print_result_fib:
 	move $t5, $a0
 	
 	# Empilha
-	subi $sp, $sp, 8
-	sw $ra, 4($sp)
+	subi $sp, $sp, 4
 	sw $a0, 0($sp)
 	
         li $v0, 1
@@ -629,16 +615,14 @@ print_result_fib:
         
         # Desempilha
 	lw $a0, 0($sp)
-	lw $ra, 4($sp)
-	addi $sp, $sp, 8
+	addi $sp, $sp, 4
           
         jr $ra
 
 
 # Le um número e retorna para o $v0
 ler_num1:
-	subi $sp, $sp, 8
-	sw $ra, 4($sp)
+	subi $sp, $sp, 4
 	sw $a0, 0($sp)
 	
 	li $v0, 4
@@ -648,16 +632,14 @@ ler_num1:
         li $v0, 5
         syscall
 
-	lw $a0, 0($sp)
-	lw $ra, 4($sp)	
-	addi $sp, $sp, 8
+	lw $a0, 0($sp)	
+	addi $sp, $sp, 4
 	
 	jr $ra
 
 # Le um número e retorna para o $v0
 ler_num2:
-	subi $sp, $sp, 8
-	sw $ra, 4($sp)
+	subi $sp, $sp, 4
 	sw $a0, 0($sp)
 	
 	li $v0, 4
@@ -668,15 +650,11 @@ ler_num2:
         syscall
 
 	lw $a0, 0($sp)
-	lw $ra, 4($sp)	
-	addi $sp, $sp, 8
+	addi $sp, $sp, 4
 	
 	jr $ra
 	
 ler_float:
-	subi $sp, $sp, 4
-	sw $ra, 0($sp)
-	
 	li $v0, 4
         la $a0, msg_float
         syscall
@@ -684,15 +662,9 @@ ler_float:
         li $v0, 6
         syscall
 
-	lw $ra, 0($sp)	
-	addi $sp, $sp, 4
-	
 	jr $ra
 	
 ler_massa:
-	subi $sp, $sp, 4
-	sw $ra, 0($sp)
-	
 	li $v0, 4
         la $a0, msg_massa
         syscall
@@ -700,15 +672,10 @@ ler_massa:
         li $v0, 6
         syscall
 
-	lw $ra, 0($sp)	
-	addi $sp, $sp, 4
 	
 	jr $ra
 	
 ler_alt:
-	subi $sp, $sp, 4
-	sw $ra, 0($sp)
-	
 	li $v0, 4
         la $a0, msg_alt
         syscall
@@ -716,7 +683,5 @@ ler_alt:
         li $v0, 6
         syscall
 
-	lw $ra, 0($sp)	
-	addi $sp, $sp, 4
 	
 	jr $ra
