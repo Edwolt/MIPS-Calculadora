@@ -55,40 +55,46 @@ menu:
 	
 soma:
 	jal ler_num1        
-	move $a1, $v0
+	move $s0, $v0
 
 	jal ler_num2
-	move $a2, $v0
+	move $s1, $v0
 
-        add $a0, $a1, $a2
-
+        add $a0, $s0, $s1
+        
+        move $a1, $s0
+        move $a2, $s1
 	jal print_result_sum
 
 	j menu
 
 subtracao:
 	jal ler_num1
-	move $a1, $v0
+	move $s0, $v0
 
 	jal ler_num2
-	move $a2, $v0
+	move $s1, $v0
 
-	sub $a0, $a1, $a2
+	sub $a0, $s0, $s1
 
+	move $a1, $s0
+        move $a2, $s1
 	jal print_result_sub
 
 	j menu
 
 multiplicacao:
 	jal ler_num1
-	move $a1, $v0
+	move $s0, $v0
 
 	jal ler_num2
-	move $a2, $v0
+	move $s1, $v0
 
-	mult $a1, $a2
+	mult $s0, $s1
 	mflo $a0
 
+	move $a1, $s0
+        move $a2, $s1
 	jal print_result_mul
 	
 	li $v0, 4
@@ -99,14 +105,16 @@ multiplicacao:
 
 divisao:
         jal ler_num1
-        move $a1, $v0
+        move $s0, $v0
 
 	jal ler_num2
-	move $a2, $v0
+	move $s1, $v0
 
-	div $a1, $a2
+	div $s0, $s1
 	mflo $a0
 
+	move $a1, $s0
+        move $a2, $s1
 	jal print_result_div
 
 	j menu
@@ -253,9 +261,8 @@ fatorial:
 
 fibonacci:
 	jal ler_num1
-	move $s0, $v0
-	
-	# i = 0
+	move $s0, $v0 # Iterador
+
         li $s1, 1
 	li $s2, 0
 	
@@ -297,8 +304,7 @@ print_result_sum:
 	move $t0, $a0
 	
 	# Empilha
-	subi $sp, $sp, 8
-	sw $v0, 4($sp)
+	subi $sp, $sp, 4
 	sw $a0, 0($sp)
 
 	# Imprime o primeiro numero
@@ -333,8 +339,7 @@ print_result_sum:
         
         # Desempilha
 	lw $a0, 0($sp)
-	lw $v0, 4($sp)
-	addi $sp, $sp, 8
+	addi $sp, $sp, 4
 	
 	jr $ra
 
@@ -344,8 +349,7 @@ print_result_sub:
 	move $t0, $a0
 	
 	# Empilha
-	subi $sp, $sp, 8
-	sw $v0, 4($sp)
+	subi $sp, $sp, 4
 	sw $a0, 0($sp)
 
 	# Imprime o primeiro numero
@@ -380,8 +384,7 @@ print_result_sub:
         
         # Desempilha
 	lw $a0, 0($sp)
-	lw $v0, 4($sp)
-	addi $sp, $sp, 8
+	addi $sp, $sp, 4
 	
 	jr $ra
 
@@ -391,8 +394,7 @@ print_result_mul:
 	move $t0, $a0
 	
 	# Empilha
-	subi $sp, $sp, 8
-	sw $v0, 4($sp)
+	subi $sp, $sp, 4
 	sw $a0, 0($sp)
 
 	# Imprime o primeiro numero
@@ -427,8 +429,7 @@ print_result_mul:
         
         # Desempilha
 	lw $a0, 0($sp)
-	lw $v0, 4($sp)
-	addi $sp, $sp, 8
+	addi $sp, $sp, 4
 	
 	jr $ra
 	
@@ -438,8 +439,7 @@ print_result_div:
 	move $t0, $a0
 	
 	# Empilha
-	subi $sp, $sp, 8
-	sw $v0, 4($sp)
+	subi $sp, $sp, 4
 	sw $a0, 0($sp)
 
 	# Imprime o primeiro numero
@@ -474,8 +474,7 @@ print_result_div:
         
         # Desempilha
 	lw $a0, 0($sp)
-	lw $v0, 4($sp)
-	addi $sp, $sp, 8
+	addi $sp, $sp, 4
 	
 	jr $ra
 
@@ -485,8 +484,7 @@ print_result_pot:
 	move $t0, $a0
 	
 	# Empilha
-	subi $sp, $sp, 8
-	sw $v0, 4($sp)
+	subi $sp, $sp, 4
 	sw $a0, 0($sp)
 
 	# Imprime o primeiro numero
@@ -521,8 +519,7 @@ print_result_pot:
         
         # Desempilha
 	lw $a0, 0($sp)
-	lw $v0, 4($sp)
-	addi $sp, $sp, 8
+	addi $sp, $sp, 4
 	
 	jr $ra
 
@@ -567,9 +564,8 @@ print_result_fat:
 	jr $ra
 
 
-print_result_fib:	
+print_result_fib:
         li $v0, 1
-        move $a0, $t0
         syscall
 
         jr $ra
@@ -578,6 +574,7 @@ print_space:
 	# Empilha
 	subi $sp, $sp, 4
 	sw $a0, 0($sp)
+
 	
 	li $v0, 4
         la $a0, msg_space
@@ -591,6 +588,7 @@ print_space:
 
 # Le um número e retorna para o $v0
 ler_num1:
+	# Empilha
 	subi $sp, $sp, 4
 	sw $a0, 0($sp)
 	
@@ -601,13 +599,15 @@ ler_num1:
         li $v0, 5
         syscall
 
-	lw $a0, 0($sp)	
+	# Desempilha
+	lw $a0, 0($sp)
 	addi $sp, $sp, 4
 	
 	jr $ra
 
 # Le um número e retorna para o $v0
 ler_num2:
+	# Empilha
 	subi $sp, $sp, 4
 	sw $a0, 0($sp)
 	
@@ -618,6 +618,7 @@ ler_num2:
         li $v0, 5
         syscall
 
+	# Desempilha
 	lw $a0, 0($sp)
 	addi $sp, $sp, 4
 	
@@ -625,12 +626,20 @@ ler_num2:
 
 # le um float e retorna para $f0	
 ler_float:
+	# Empilha
+	subi $sp, $sp, 4
+	sw $a0, 0($sp)
+	
 	li $v0, 4
         la $a0, msg_float
         syscall
  
         li $v0, 6
         syscall
+
+	# Desempilha
+	lw $a0, 0($sp)
+	addi $sp, $sp, 4
 
 	jr $ra
 
@@ -648,6 +657,10 @@ ler_massa:
 
 # le uma altura (float) e retorna para $f0
 ler_alt:
+	# Empilha
+	subi $sp, $sp, 4
+	sw $a0, 0($sp)
+
 	li $v0, 4
         la $a0, msg_alt
         syscall
@@ -655,5 +668,8 @@ ler_alt:
         li $v0, 6
         syscall
 
+	# Desempilha
+	lw $a0, 0($sp)
+	addi $sp, $sp, 4
 	
 	jr $ra
