@@ -1,9 +1,12 @@
-        .data
+.data
 	.align 0
 msg_menu:	.asciiz "Escolha uma opção: \n1-Soma\n2-Subtração\n3-Multiplicação\n4-Divisão\n5-Potência\n6-Raiz Quadrada\n7-Tabuada\n8-IMC\n9-Fatorial\n10-Sequência de Fibonacci\n0-Sair\n"         
 msg_num1:	.asciiz "Digite um número inteiro:\n"
 msg_num2:	.asciiz "Digite outro número inteiro:\n"
 msg_num3:       .asciiz "Digite um número real:\n"
+msg_num4:       .asciiz "Digite a massa(Kg): \n"
+msg_num5:       .asciiz "Digite a altura(m): \n"
+msg_num6:       .asciiz "O IMC é igual a: "
 msg_n:		.asciiz "\n"
 msg_nn:		.asciiz "\n\n"
 msg_sym1:       .asciiz " = "
@@ -124,33 +127,22 @@ potencia:
 	jal ler_num2
 	move $s1, $v0
 	
-	
-	
-	move $a1, $s0
-        move $a2, $s1
-        
+	# i = 0
+        li $t0, 1
         li $a0, 1
-        li $t3, 0
-	
-	beq $s1, 0, print_result_pot
-	beq $s1, 1, print_result_pot
+          
+          while1:
+                bgt $t0, $s1, exit1
+                mult $a0, $s0
+                mflo $a0
+                addi $t0, $t0, 1      # i++ or i = i + 1
+                
+                j while1
+          exit1:
+               move $a1, $s0
+               move $a2, $s1
+               jal print_result_pot
 
-	
-	loop_t1:
-	        bgt $s1, $t3, loop_t1_fim
-	        
-		mult $a0, $s0
-		mflo $a0
-                move $a2, $t3
-
-		addi $t3, $t3, 1
-		
-		j loop_t1
-		
-	loop_t1_fim:
-	        jal print_result_pot
-	        j menu
-        
 	j menu
 
 raiz:
@@ -214,8 +206,32 @@ tabuada:
 	        j menu
 	        
 imc:
-	jal ler_num1
- 
+	jal ler_massa
+	lwc1 $f1, zeroAsFloat
+	add.s $f2, $f0, $f1
+	 
+	jal ler_alt
+	add.s $f3, $f0, $f1
+	
+	mul.s $f4, $f3, $f3
+	
+	div.s $f5, $f2, $f4
+	
+	# Display message
+        li $v0, 4
+        la $a0, msg_num6
+        syscall
+	
+	# Display value
+        li    $v0, 2
+        add.s $f12, $f1, $f5
+        syscall
+        
+        # Display message
+        li $v0, 4
+        la $a0, msg_nn
+        syscall
+	
 	j menu
 
 fatorial:
@@ -664,6 +680,38 @@ ler_float:
 	
 	li $v0, 4
         la $a0, msg_num3
+        syscall
+ 
+        li $v0, 6
+        syscall
+
+	lw $ra, 0($sp)	
+	addi $sp, $sp, 4
+	
+	jr $ra
+	
+ler_massa:
+	subi $sp, $sp, 4
+	sw $ra, 0($sp)
+	
+	li $v0, 4
+        la $a0, msg_num4
+        syscall
+ 
+        li $v0, 6
+        syscall
+
+	lw $ra, 0($sp)	
+	addi $sp, $sp, 4
+	
+	jr $ra
+	
+ler_alt:
+	subi $sp, $sp, 4
+	sw $ra, 0($sp)
+	
+	li $v0, 4
+        la $a0, msg_num5
         syscall
  
         li $v0, 6
