@@ -1,5 +1,11 @@
-.data
-	.align 0
+# 1o Trabalho Pratico
+# Autores:
+# Nome: Fabio Dias da Cunha    N°USP: 11320874
+# Nome: Eduardo Souza Rocha    N°USP: 11218692
+                
+                .data
+	        .align 0
+	        
 msg_menu:	.asciiz "Escolha uma opção: \n1-Soma\n2-Subtração\n3-Multiplicação\n4-Divisão\n5-Potência\n6-Raiz Quadrada\n7-Tabuada\n8-IMC\n9-Fatorial\n10-Sequência de Fibonacci\n0-Sair\n"         
 msg_num1:	.asciiz "Digite um número inteiro:\n"
 msg_num2:	.asciiz "Digite outro número inteiro:\n"
@@ -19,25 +25,30 @@ msg_sym7:       .asciiz " ^ "
 msg_resp1:      .asciiz "A raiz quadrada de "
 msg_resp2:      .asciiz " é igual a "
 msg_fim:        .asciiz "Fim\n\n"
-msg_space:          .asciiz ", "
+msg_space:      .asciiz ", "
+msg_erro:       .asciiz "Parâmetro(s) inválido(s).\n\n"
      
-	.align 2
-zeroAsFloat:  .float 0.0 
+	        .align 2
+	        
+zeroAsFloat:    .float 0.0 
 
-	.text
-	.globl main 
+	        .text
+	        .globl main 
 
 main:
-	j menu 
+	j menu # jump incondicional para o menu
 	 
 menu:
+        # Exibe para o usuario as opcoes disponiveis no menu
 	li $v0, 4
 	la $a0, msg_menu
 	syscall
 
+	# Le a opcao que o usuario vai selecionar
 	li $v0, 5
 	syscall
 
+	# Jump condicional para as operacoes
 	beq $v0, 1, soma
 	beq $v0, 2, subtracao
 	beq $v0, 3, multiplicacao
@@ -83,11 +94,21 @@ subtracao:
 	j menu
 
 multiplicacao:
+        # Eu escolhi esse intervalo , porque é a raiz aproximada do maior número que podemos representar: -2.147.483.648 a 2.147.483.647
+        li $t7, 46340
+        li $t8, -46340
+        
 	jal ler_num1
 	move $s0, $v0
+	
+	bgt $s0, $t7, erro
+	blt $s0, $t8, erro
 
 	jal ler_num2
 	move $s1, $v0
+	
+	bgt $s1, $t7, erro
+	blt $s1, $t8, erro
 
 	mult $s0, $s1
 	mflo $a0
@@ -105,11 +126,21 @@ multiplicacao:
 	j menu
 
 divisao:
+        li $t7, 46340
+        li $t8, -46340
+        
         jal ler_num1
         move $s0, $v0
+        
+        bgt $s0, $t7, erro
+	blt $s0, $t8, erro
 
 	jal ler_num2
 	move $s1, $v0
+	
+	bgt $s1, $t7, erro
+	blt $s1, $t8, erro
+	beq $s1, $zero, erro
 
 	div $s0, $s1
 	mflo $a0
@@ -127,6 +158,10 @@ potencia:
 	jal ler_num2
 	move $s1, $v0
 	
+	move $a1, $s0
+	move $a2, $s1
+	bltz $s1, potException
+	
 	# i = 0
         li $t0, 1
         li $a0, 1
@@ -142,13 +177,48 @@ potencia:
                move $a1, $s0
                move $a2, $s1
                jal print_result_pot
+               
+	j menu
 
+potException:
+        move $s0, $a1
+        move $s1, $a2
+        move $t2, $a2
+        
+        li $t0, -1
+        mult $t0, $s1
+	mflo $s1
+        
+          
+        # i = 0
+        li $t0, 1
+        li $a0, 1  
+        
+          while2:
+                bgt $t0, $s1, exit2
+                mult $a0, $s0
+                mflo $a0
+                addi $t0, $t0, 1      # i++ or i = i + 1
+                
+                j while2
+          exit2:
+               li $t0, 1
+               div $t0, $a0
+               mflo $a0
+               move $a1, $s0
+               move $a2, $t2
+               jal print_result_pot
+               
 	j menu
 
 raiz:
 	jal ler_float
-	
 	lwc1 $f2, zeroAsFloat
+	
+	# Verifica se o número é menor que zero
+	c.lt.s $f0, $f2
+	bc1t erro
+	
 	sqrt.s $f1, $f0
 	
 	# Imprime uma frase
@@ -206,11 +276,20 @@ tabuada:
 	        j menu
 	        
 imc:
+        lwc1 $f1, zeroAsFloat
+        
+        # Le o numero e verifica se o número é menor que zero
 	jal ler_massa
-	lwc1 $f1, zeroAsFloat
+	c.lt.s $f0, $f1
+	bc1t erro
+	
 	add.s $f2, $f0, $f1
 	 
+	# Le o numero e verifica se o número é menor que zero
 	jal ler_alt
+	c.le.s $f0, $f1
+	bc1t erro
+	
 	add.s $f3, $f0, $f1
 	
 	mul.s $f4, $f3, $f3
@@ -236,6 +315,10 @@ imc:
 
 fatorial:
 	jal ler_num1
+	li $t8, 12
+	
+	bltz $v0, erro
+	bgt $v0, $t8, erro
 
 	move $t0, $v0
 	move $a1, $v0
@@ -244,12 +327,13 @@ fatorial:
 
 	# for(t0 = a0, t0 != 0, t0--)
 	loop_t3:
+	        beq $t0, $zero, loop_t3_fim
+		
 		mult $a0, $t0
 		mflo $a0
 
 		subi $t0, $t0, 1
 
-		beqz $t0, loop_t3_fim
 		j loop_t3
 	loop_t3_fim:
 
@@ -259,6 +343,11 @@ fatorial:
 
 fibonacci:
 	jal ler_num1
+	li $t8, 45
+	
+	bltz $v0, erro
+	bgt $v0, $t8, erro
+	
 	move $s0, $v0
 	addi $s0, $s0, -1
 	
@@ -286,6 +375,7 @@ fibonacci:
 sair:
 	li $v0, 10
 	syscall
+
 
 # Imprime resultado da soma
 print_result_sum:
@@ -474,7 +564,8 @@ print_result_div:
 	addi $sp, $sp, 8
 	
 	jr $ra
-	
+
+# Imprime resultado da potenciação
 print_result_pot:
 	# Salva $a0 em $t0 pois $a0 será usado
 	move $t0, $a0
@@ -521,6 +612,7 @@ print_result_pot:
 	
 	jr $ra
 	
+# Imprime resultado da radiciação
 print_result_raiz:
 	# Salva $a0 em $t0 pois $a0 será usado
 	move $t0, $a0
@@ -567,7 +659,6 @@ print_result_raiz:
 	
 	jr $ra
 	
-	
 # Imprime resultado do fatorial
 print_result_fat:
 	# Salva $a0 em $t0 pois $a0 será usado
@@ -610,7 +701,7 @@ print_result_fat:
 	
 	jr $ra
 
-
+# Imprime a sequência de fibonacci até determinado número
 print_result_fib:
         # Salva $a0 em $t5 pois $a0 será usado
 	move $t5, $a0
@@ -674,6 +765,7 @@ ler_num2:
 	
 	jr $ra
 	
+# Le um float e retorna para o $f0
 ler_float:
 	subi $sp, $sp, 4
 	sw $ra, 0($sp)
@@ -690,6 +782,7 @@ ler_float:
 	
 	jr $ra
 	
+# Le um float e retorna para o $f0
 ler_massa:
 	subi $sp, $sp, 4
 	sw $ra, 0($sp)
@@ -706,6 +799,7 @@ ler_massa:
 	
 	jr $ra
 	
+# Le um float e retorna para o $f0
 ler_alt:
 	subi $sp, $sp, 4
 	sw $ra, 0($sp)
@@ -721,3 +815,10 @@ ler_alt:
 	addi $sp, $sp, 4
 	
 	jr $ra
+
+erro:
+	li $v0, 4
+	la $a0, msg_erro
+	syscall
+	
+	j menu
