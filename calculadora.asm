@@ -1,4 +1,4 @@
-	        .data
+        .data
 	.align 0
 msg_menu:	.asciiz "Escolha uma opção: \n1-Soma\n2-Subtração\n3-Multiplicação\n4-Divisão\n5-Potência\n6-Raiz Quadrada\n7-Tabuada\n8-IMC\n9-Fatorial\n10-Sequência de Fibonacci\n0-Sair\n"         
 msg_num1:	.asciiz "Digite um número inteiro:\n"
@@ -90,6 +90,11 @@ multiplicacao:
         move $a2, $s1
 
 	jal print_result_mul
+	
+	# Imprime espaço vazio
+        li $v0, 4
+        la $a0, msg_n
+        syscall
 
 	j menu
 
@@ -199,6 +204,10 @@ tabuada:
 		j loop_t2
 		
 	loop_t2_fim:
+	        # Imprime espaço vazio
+        	li $v0, 4
+        	la $a0, msg_n
+        	syscall
 	        j menu
 	        
 imc:
@@ -369,7 +378,7 @@ print_result_mul:
         
         # Imprime espaço vazio
         li $v0, 4
-        la $a0, msg_nn
+        la $a0, msg_n
         syscall
         
         # Desempilha
@@ -613,4 +622,3 @@ ler_float:
 	addi $sp, $sp, 4
 	
 	jr $ra
-
