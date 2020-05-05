@@ -1,4 +1,6 @@
-# Casos de Teste de Soma
+# Casos de Teste
+
+## Casos de Teste de Soma
 
 ### Caso de teste: 40000 + 645754 = 685754
 ```
@@ -87,6 +89,7 @@ Digite outro número inteiro:
 -68
 -78 + -68 = -146
 ```
+## Casos de Teste de Subtração
 
 ### Caso de teste: 10000 - 8675 = 1325
 ```
