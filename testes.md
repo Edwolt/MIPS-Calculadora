@@ -202,7 +202,7 @@ Digite outro número inteiro:
 ```
 
 ## Multiplicação
-A nossa calculadora só aceita números de 16 bits, ou seja, números entre -46340 e 46340 inclusive
+A nossa calculadora, na opção de multiplicação, só aceita números de 16 bits, ou seja, números entre -46340 e 46340 inclusive
 
 ### Caso de teste: 46340 x 46340 = 2147395600
 ```
@@ -308,5 +308,115 @@ Digite um número inteiro:
 Digite outro número inteiro:
 6
 5 x 6 = 30
+```
 
+## Divisão
+A nossa calculadora, na opção de divisão, só aceita números de 16 bits, ou seja, números entre -46340 e 46340 inclusive. Além de não aceitar o 0 como divisor
+
+### Caso de teste: 1 / 0
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+4
+Digite um número inteiro:
+1
+Digite outro número inteiro:
+0
+Parâmetro(s) inválido(s).
+```
+
+### Caso de teste: 600 / 25 = 24
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+4
+Digite um número inteiro:
+600
+Digite outro número inteiro:
+25
+600 / 25 = 24
+```
+
+### Caso de teste: 46340 / 2 = 23170
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+4
+Digite um número inteiro:
+46340
+Digite outro número inteiro:
+2
+46340 / 2 = 23170
+```
+
+### Caso de teste: 46341 / 2
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+4
+Digite um número inteiro:
+46341
+Parâmetro(s) inválido(s).
+```
+
+### Caso de teste: 50 / (-1) = -50
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+4
+Digite um número inteiro:
+50
+Digite outro número inteiro:
+-1
+50 / -1 = -50
 ```
