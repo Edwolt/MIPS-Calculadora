@@ -1,12 +1,18 @@
-.data
-	.align 0
+# 1o Trabalho Pratico
+# Autores:
+# Nome: Fabio Dias da Cunha    N°USP: 11320874
+# Nome: Eduardo Souza Rocha    N°USP: 11218692
+                
+                .data
+	        .align 0
+
 msg_menu:	.asciiz "Escolha uma opção: \n1-Soma\n2-Subtração\n3-Multiplicação\n4-Divisão\n5-Potência\n6-Raiz Quadrada\n7-Tabuada\n8-IMC\n9-Fatorial\n10-Sequência de Fibonacci\n0-Sair\n"         
 msg_num1:	.asciiz "Digite um número inteiro:\n"
 msg_num2:	.asciiz "Digite outro número inteiro:\n"
 msg_float:       .asciiz "Digite um número real:\n"
 msg_massa:       .asciiz "Digite a massa(Kg): \n"
 msg_alt:       .asciiz "Digite a altura(m): \n"
-msg_icmc:       .asciiz "O IMC é igual a: "
+msg_imc:       .asciiz "O IMC é igual a: "
 msg_n:		.asciiz "\n"
 msg_nn:		.asciiz "\n\n"
 msg_sym_eq:       .asciiz " = "
@@ -20,20 +26,24 @@ msg_res_raiz:      .asciiz "A raiz quadrada de "
 msg_res_igual:      .asciiz " é igual a "
 msg_space:          .asciiz ", "
 
-	.text
-	.globl main 
+
+	        .text
+	        .globl main 
 
 main:
-	j menu 
+	j menu # jump incondicional para o menu
 	 
 menu:
+        # Exibe para o usuario as opcoes disponiveis no menu
 	li $v0, 4
 	la $a0, msg_menu
 	syscall
 
+	# Le a opcao que o usuario vai selecionar
 	li $v0, 5
 	syscall
 
+	# Jump condicional para as operacoes
 	beq $v0, 1, soma
 	beq $v0, 2, subtracao
 	beq $v0, 3, multiplicacao
@@ -84,11 +94,21 @@ subtracao:
 	j menu
 
 multiplicacao:
+        # Eu escolhi esse intervalo , porque é a raiz aproximada do maior número que podemos representar: -2.147.483.648 a 2.147.483.647
+        li $t7, 46340
+        li $t8, -46340
+        
 	jal ler_num1
 	move $s0, $v0
+	
+	bgt $s0, $t7, erro
+	blt $s0, $t8, erro
 
 	jal ler_num2
 	move $s1, $v0
+	
+	bgt $s1, $t7, erro
+	blt $s1, $t8, erro
 
 	mult $s0, $s1
 	mflo $a0
@@ -104,11 +124,21 @@ multiplicacao:
 	j menu
 
 divisao:
+        li $t7, 46340
+        li $t8, -46340
+        
         jal ler_num1
         move $s0, $v0
+        
+        bgt $s0, $t7, erro
+	blt $s0, $t8, erro
 
 	jal ler_num2
 	move $s1, $v0
+	
+	bgt $s1, $t7, erro
+	blt $s1, $t8, erro
+	beq $s1, $zero, erro
 
 	div $s0, $s1
 	mflo $a0
@@ -125,6 +155,10 @@ potencia:
 
 	jal ler_num2
 	move $s1, $v0
+	
+	move $a1, $s0
+	move $a2, $s1
+	bltz $s1, potException
 	
 	# i = 0
         li $t0, 1
@@ -145,7 +179,38 @@ potencia:
 	move $a1, $s0
 	move $a2, $s1
 	jal print_result_pot
+               
+	j menu
 
+potException:
+        move $s0, $a1
+        move $s1, $a2
+        move $t2, $a2
+        
+        li $t0, -1
+        mult $t0, $s1
+	mflo $s1
+        
+          
+        # i = 0
+        li $t0, 1
+        li $a0, 1  
+        
+          while2:
+                bgt $t0, $s1, exit2
+                mult $a0, $s0
+                mflo $a0
+                addi $t0, $t0, 1      # i++ or i = i + 1
+                
+                j while2
+          exit2:
+               li $t0, 1
+               div $t0, $a0
+               mflo $a0
+               move $a1, $s0
+               move $a2, $t2
+               jal print_result_pot
+               
 	j menu
 
 raiz:
@@ -209,10 +274,18 @@ tabuada:
 	        j menu
 	        
 imc:
+        lwc1 $f1, zeroAsFloat
+        
+        # Le o numero e verifica se o número é menor que zero
 	jal ler_massa
 	mov.s $f1, $f0
 	 
+	# Le o numero e verifica se o número é menor que zero
 	jal ler_alt
+ 
+	c.le.s $f0, $f1
+	bc1t erro
+	
 	mov.s $f2, $f0
 	
 	mul.s $f3, $f2, $f2
@@ -238,6 +311,10 @@ imc:
 
 fatorial:
 	jal ler_num1
+	li $t8, 12
+	
+	bltz $v0, erro
+	bgt $v0, $t8, erro
 
 	move $t0, $v0 # iterador
  	move $a1, $v0
@@ -245,7 +322,10 @@ fatorial:
 	li $a0, 1   # Resultado do fatorial
 
 	# for(t0 = a0, t0 != 0, t0--)
+
 	fatorial_loop_t3:
+	        beq $t0, $zero, loop_t3_fim
+ 
 		mult $a0, $t0
 		mflo $a0
 
@@ -261,7 +341,8 @@ fatorial:
 
 fibonacci:
 	jal ler_num1
-	move $s0, $v0 # Iterador
+# refatora
+move $s0, $v0 # Iterador
 
         li $s1, 1
 	li $s2, 0
@@ -273,6 +354,23 @@ fibonacci:
         	jal print_space       #imprime ", "
 	fibonacci_while_start:
                 move $a0, $s1
+# Master
+	li $t8, 45
+	
+	bltz $v0, erro
+	bgt $v0, $t8, erro
+	
+	move $s0, $v0
+	addi $s0, $s0, -1
+	
+	# i = 0
+        li $t0, 0
+        li $t1, 0
+        li $a0, 1
+          
+          while:
+                bgt $t0, $s0, exit
+#FIM
                 jal print_result_fib
 
                 move $t3, $s1
@@ -293,6 +391,7 @@ fibonacci:
 sair:
 	li $v0, 10
 	syscall
+
 
 ###################
 ##### Funções #####
@@ -478,7 +577,7 @@ print_result_div:
 	
 	jr $ra
 
-# Imprime o resultado da potência $a1 ^ $a2 = $a0
+# Imprime o resultado da potênciação $a1 ^ $a2 = $a0
 print_result_pot:
 	# Salva $a0 em $t0 pois $a0 será usado
 	move $t0, $a0
@@ -563,7 +662,7 @@ print_result_fat:
 	
 	jr $ra
 
-
+# Imprime a sequência de fibonacci até determinado número
 print_result_fib:
         li $v0, 1
         syscall
@@ -623,8 +722,8 @@ ler_num2:
 	addi $sp, $sp, 4
 	
 	jr $ra
-
-# le um float e retorna para $f0	
+	
+# Le um float e retorna para o $f0
 ler_float:
 	# Empilha
 	subi $sp, $sp, 4
@@ -642,8 +741,8 @@ ler_float:
 	addi $sp, $sp, 4
 
 	jr $ra
-
-# le uma massa (float) e retorna para $f0	
+  
+# Le uma massa (float) e retorna para o $f0
 ler_massa:
 	li $v0, 4
         la $a0, msg_massa
@@ -654,8 +753,8 @@ ler_massa:
 
 	
 	jr $ra
-
-# le uma altura (float) e retorna para $f0
+ 
+# Le um altura (float) e retorna para o $f0
 ler_alt:
 	# Empilha
 	subi $sp, $sp, 4
@@ -673,3 +772,10 @@ ler_alt:
 	addi $sp, $sp, 4
 	
 	jr $ra
+
+erro:
+	li $v0, 4
+	la $a0, msg_erro
+	syscall
+	
+	j menu
