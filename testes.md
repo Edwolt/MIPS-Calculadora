@@ -511,3 +511,125 @@ Digite outro número inteiro:
 60
 O resultado é um número muito grande, e não pode ser calculado.
 ```
+
+## Raiz Quadrada
+
+### Caso de Teste: √(-1)
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+6
+Digite um número real:
+-8
+Parâmetro(s) inválido(s).
+```
+
+### Caso de Teste: √4 = 2
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+6
+Digite um número real:
+4
+A raiz quadrada de 4.0 é igual a 2.0
+```
+
+### Caso de Teste: √0 = 0
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+6
+Digite um número real:
+0
+A raiz quadrada de 0.0 é igual a 0.0
+```
+
+### Caso de Teste: √9604 = 98 
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+6
+Digite um número real:
+9604
+A raiz quadrada de 9604.0 é igual a 98.0
+```
+
+### Caso de Teste: √9 = 3
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+6
+Digite um número real:
+9
+A raiz quadrada de 9.0 é igual a 3.0
+```
+
+### Caso de Teste: √10 = 3,16...
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+6
+Digite um número real:
+10
+A raiz quadrada de 10.0 é igual a 3.1622777
+```
