@@ -783,3 +783,125 @@ Digite a massa(Kg):
 -72
 Parâmetro(s) inválido(s).
 ```
+
+## Fatorial
+
+### Caso de teste: 0! = 1
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+9
+Digite um número inteiro:
+0
+0! = 1
+```
+
+### Caso de teste: 1! = 1
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+9
+Digite um número inteiro:
+1
+1! = 1
+```
+
+### Caso de teste: 7! = 5040
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+9
+Digite um número inteiro:
+7
+7! = 5040
+```
+
+### Caso de teste: 12! = 479001600
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+9
+Digite um número inteiro:
+12
+12! = 479001600
+```
+
+### Caso de teste: 13!
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+9
+Digite um número inteiro:
+13
+Parâmetro(s) inválido(s).
+```
+
+### Caso de teste: (-1)!
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+9
+Digite um número inteiro:
+-1
+Parâmetro(s) inválido(s).
+```
