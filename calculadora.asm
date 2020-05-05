@@ -333,7 +333,8 @@ fatorial:
  	move $a1, $v0
 	
 	li $a0, 1   # Resultado do fatorial
-
+	beqz  $v0, fatorial_loop_t3_fim
+	
 	# for(t0 = a0, t0 != 0, t0--)
 
 	fatorial_loop_t3:
