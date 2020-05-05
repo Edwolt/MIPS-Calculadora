@@ -359,6 +359,7 @@ fibonacci:
 	
 	bltz $v0, erro
 	bgt $v0, $t8, erro
+	beqz $v0, fibonacci_while_exit
 	
         li $s1, 1
 	li $s2, 0
