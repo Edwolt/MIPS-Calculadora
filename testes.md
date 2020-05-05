@@ -420,3 +420,94 @@ Digite outro número inteiro:
 -1
 50 / -1 = -50
 ```
+## Potência
+Quando a operação da overflow, a calculadora exibe uma mensagem de erro
+
+### Caso de teste: 2 ^ -1 = 0
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+5
+Digite um número inteiro:
+2
+Digite outro número inteiro:
+-1
+2 ^ -1 = 0
+```
+
+### Caso de teste: 2 ^ 0 = 1
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+5
+Digite um número inteiro:
+2
+Digite outro número inteiro:
+0
+2 ^ 0 = 1
+```
+
+
+### Caso de teste: 2 ^ 10 = 1024
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+5
+Digite um número inteiro:
+2
+Digite outro número inteiro:
+10
+2 ^ 10 = 1024
+```
+
+### Caso de teste: 60 ^ 60
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+5
+Digite um número inteiro:
+60
+Digite outro número inteiro:
+60
+O resultado é um número muito grande, e não pode ser calculado.
+```
