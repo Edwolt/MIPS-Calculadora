@@ -633,3 +633,153 @@ Digite um número real:
 10
 A raiz quadrada de 10.0 é igual a 3.1622777
 ```
+
+## Tabuada
+
+### Caso de teste: 6
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+7
+Digite um número inteiro:
+6
+6 x 0 = 0
+6 x 1 = 6
+6 x 2 = 12
+6 x 3 = 18
+6 x 4 = 24
+6 x 5 = 30
+6 x 6 = 36
+6 x 7 = 42
+6 x 8 = 48
+6 x 9 = 54
+6 x 10 = 60
+```
+
+### Caso de teste: -6
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+7
+Digite um número inteiro:
+-6
+-6 x 0 = 0
+-6 x 1 = -6
+-6 x 2 = -12
+-6 x 3 = -18
+-6 x 4 = -24
+-6 x 5 = -30
+-6 x 6 = -36
+-6 x 7 = -42
+-6 x 8 = -48
+-6 x 9 = -54
+-6 x 10 = -60
+```
+
+## IMC
+
+### Caso de teste: IMC(72, 1.75) = 23.5102...
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+8
+Digite a massa(Kg): 
+72
+Digite a altura(m): 
+1.75
+O IMC é igual a: 23.510204
+```
+
+### Caso de teste: IMC(72, 0)
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+8
+Digite a massa(Kg): 
+72
+Digite a altura(m): 
+0
+O IMC é igual a: Infinity
+```
+
+### Caso de teste: IMC(72, -9)
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+8
+Digite a massa(Kg): 
+72
+Digite a altura(m): 
+-9
+Parâmetro(s) inválido(s).
+```
+
+### Caso de teste: IMC(-72, 1.75)
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+8
+Digite a massa(Kg): 
+-72
+Parâmetro(s) inválido(s).
+```
