@@ -9,23 +9,25 @@
 msg_menu:	.asciiz "Escolha uma opção: \n1-Soma\n2-Subtração\n3-Multiplicação\n4-Divisão\n5-Potência\n6-Raiz Quadrada\n7-Tabuada\n8-IMC\n9-Fatorial\n10-Sequência de Fibonacci\n0-Sair\n"         
 msg_num1:	.asciiz "Digite um número inteiro:\n"
 msg_num2:	.asciiz "Digite outro número inteiro:\n"
-msg_float:       .asciiz "Digite um número real:\n"
-msg_massa:       .asciiz "Digite a massa(Kg): \n"
-msg_alt:       .asciiz "Digite a altura(m): \n"
-msg_imc:       .asciiz "O IMC é igual a: "
+msg_float:      .asciiz "Digite um número real:\n"
+msg_massa:      .asciiz "Digite a massa(Kg): \n"
+msg_alt:        .asciiz "Digite a altura(m): \n"
+msg_icmc:        .asciiz "O IMC é igual a: "
 msg_n:		.asciiz "\n"
 msg_nn:		.asciiz "\n\n"
-msg_sym_eq:       .asciiz " = "
-msg_sym_sum:       .asciiz " + "
-msg_sym_menos:       .asciiz " - "
-msg_sym_mul:       .asciiz " x "
-msg_sym_div:       .asciiz " / "
-msg_sym_fat:       .asciiz "!"
-msg_sym_pot:       .asciiz " ^ "
-msg_res_raiz:      .asciiz "A raiz quadrada de "
-msg_res_igual:      .asciiz " é igual a "
-msg_space:          .asciiz ", "
-
+msg_sym_eq:     .asciiz " = "
+msg_sym_sum:    .asciiz " + "
+msg_sym_menos:  .asciiz " - "
+msg_sym_mul:    .asciiz " x "
+msg_sym_div:    .asciiz " / "
+msg_sym_fat:    .asciiz "!"
+msg_sym_pot:    .asciiz " ^ "
+msg_res_raiz:   .asciiz "A raiz quadrada de "
+msg_res_igual:  .asciiz " é igual a "
+msg_space:      .asciiz ", "
+msg_erro:       .asciiz "Parâmetro(s) inválido(s).\n\n"
+		.align 2
+float_zero:     .float 0.0
 
 	        .text
 	        .globl main 
@@ -94,7 +96,7 @@ subtracao:
 	j menu
 
 multiplicacao:
-        # Eu escolhi esse intervalo , porque é a raiz aproximada do maior número que podemos representar: -2.147.483.648 a 2.147.483.647
+        # Eu escolhi esse intervalo , porque eh a raiz aproximada do maior número que podemos representar: -2.147.483.648 a 2.147.483.647
         li $t7, 46340
         li $t8, -46340
         
@@ -158,7 +160,7 @@ potencia:
 	
 	move $a1, $s0
 	move $a2, $s1
-	bltz $s1, potException
+	bltz $s1, potneg
 	
 	# i = 0
         li $t0, 1
@@ -182,7 +184,7 @@ potencia:
                
 	j menu
 
-potException:
+potneg:
         move $s0, $a1
         move $s1, $a2
         move $t2, $a2
@@ -196,14 +198,14 @@ potException:
         li $t0, 1
         li $a0, 1  
         
-          while2:
-                bgt $t0, $s1, exit2
+        potneg_while:
+                bgt $t0, $s1, potneg_while_end
                 mult $a0, $s0
                 mflo $a0
                 addi $t0, $t0, 1      # i++ or i = i + 1
                 
-                j while2
-          exit2:
+                j potneg_while
+        potneg_while_end:
                li $t0, 1
                div $t0, $a0
                mflo $a0
@@ -214,7 +216,11 @@ potException:
 	j menu
 
 raiz:
+	lwc1 $f5, float_zero
+
 	jal ler_float
+	c.lt.s $f0, $f5
+	bc1t erro
 	
 	sqrt.s $f1, $f0
 	
@@ -273,17 +279,18 @@ tabuada:
         	syscall
 	        j menu
 	        
-imc:
-        lwc1 $f1, zeroAsFloat
-        
+imc:       
+	lwc1 $f5, float_zero 
         # Le o numero e verifica se o número é menor que zero
 	jal ler_massa
-	mov.s $f1, $f0
-	 
+	c.le.s $f0, $f5
+	bc1t erro
+	
+	mov.s $f1, $f0   # Salva valor em $f1
+	  
 	# Le o numero e verifica se o número é menor que zero
 	jal ler_alt
- 
-	c.le.s $f0, $f1
+	c.lt.s $f0, $f5
 	bc1t erro
 	
 	mov.s $f2, $f0
@@ -324,8 +331,6 @@ fatorial:
 	# for(t0 = a0, t0 != 0, t0--)
 
 	fatorial_loop_t3:
-	        beq $t0, $zero, loop_t3_fim
- 
 		mult $a0, $t0
 		mflo $a0
 
@@ -341,9 +346,13 @@ fatorial:
 
 fibonacci:
 	jal ler_num1
-# refatora
-move $s0, $v0 # Iterador
 
+	move $s0, $v0 # Iterador
+	li $t8, 45
+	
+	bltz $v0, erro
+	bgt $v0, $t8, erro
+	
         li $s1, 1
 	li $s2, 0
 	
@@ -354,23 +363,6 @@ move $s0, $v0 # Iterador
         	jal print_space       #imprime ", "
 	fibonacci_while_start:
                 move $a0, $s1
-# Master
-	li $t8, 45
-	
-	bltz $v0, erro
-	bgt $v0, $t8, erro
-	
-	move $s0, $v0
-	addi $s0, $s0, -1
-	
-	# i = 0
-        li $t0, 0
-        li $t1, 0
-        li $a0, 1
-          
-          while:
-                bgt $t0, $s0, exit
-#FIM
                 jal print_result_fib
 
                 move $t3, $s1
