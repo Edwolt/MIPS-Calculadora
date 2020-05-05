@@ -785,6 +785,7 @@ Parâmetro(s) inválido(s).
 ```
 
 ## Fatorial
+Aceita valores de no máximo 12, pois maior que isso da overflow
 
 ### Caso de teste: 0! = 1
 ```
@@ -901,6 +902,128 @@ Escolha uma opção:
 10-Sequência de Fibonacci
 0-Sair
 9
+Digite um número inteiro:
+-1
+Parâmetro(s) inválido(s).
+```
+
+## Sequência de Fibonacci
+Aceita valores de no máximo 45, depois disso da overflow
+
+### Caso de teste: 0:
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+10
+Digite um número inteiro:
+0
+```
+
+### Caso de teste: 1: 1
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+10
+Digite um número inteiro:
+1
+1
+```
+
+### Caso de teste: 5: 1, 1, 2, 3, 5
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+10
+Digite um número inteiro:
+5
+1, 1, 2, 3, 5
+```
+
+### Caso de teste: 45: 1, 1, 2, ..., 1134903170
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+10
+Digite um número inteiro:
+45
+1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, 17711, 28657, 46368, 75025, 121393, 196418, 317811, 514229, 832040, 1346269, 2178309, 3524578, 5702887, 9227465, 14930352, 24157817, 39088169, 63245986, 102334155, 165580141, 267914296, 433494437, 701408733, 1134903170
+```
+
+### Caso de teste: 46
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+10
+Digite um número inteiro:
+46
+Parâmetro(s) inválido(s).
+```
+
+### Caso de teste: -1
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+10
 Digite um número inteiro:
 -1
 Parâmetro(s) inválido(s).
