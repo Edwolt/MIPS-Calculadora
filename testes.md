@@ -1,6 +1,6 @@
 # Casos de Teste
 
-## Casos de Teste de Soma
+## Soma
 
 ### Caso de teste: 40000 + 645754 = 685754
 ```
@@ -89,7 +89,7 @@ Digite outro número inteiro:
 -68
 -78 + -68 = -146
 ```
-## Casos de Teste de Subtração
+## Subtração
 
 ### Caso de teste: 10000 - 8675 = 1325
 ```
@@ -199,4 +199,114 @@ Digite um número inteiro:
 Digite outro número inteiro:
 -960
 -768 - -960 = 192
+```
+
+## Multiplicação
+A nossa calculadora só aceita números de 16 bits, ou seja, números entre -46340 e 46340 inclusive
+
+### Caso de teste: 46340 x 46340 = 2147395600
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+3
+Digite um número inteiro:
+46340
+Digite outro número inteiro:
+46340
+46340 x 46340 = 2147395600
+```
+
+### Caso de teste: 46341 x 46341
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+3
+Digite um número inteiro:
+46341
+Parâmetro(s) inválido(s).
+```
+
+### Caso de teste: -46341 x -46341
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+3
+Digite um número inteiro:
+-46341
+Parâmetro(s) inválido(s).
+```
+
+### Caso de teste: -46340 x 46340 = -2147395600
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+3
+Digite um número inteiro:
+-46340
+Digite outro número inteiro:
+46340
+-46340 x 46340 = -2147395600
+```
+
+### Caso de teste: 5 x 6 = 30
+```
+Escolha uma opção: 
+1-Soma
+2-Subtração
+3-Multiplicação
+4-Divisão
+5-Potência
+6-Raiz Quadrada
+7-Tabuada
+8-IMC
+9-Fatorial
+10-Sequência de Fibonacci
+0-Sair
+3
+Digite um número inteiro:
+5
+Digite outro número inteiro:
+6
+5 x 6 = 30
+
 ```
