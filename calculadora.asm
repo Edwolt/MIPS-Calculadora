@@ -26,6 +26,7 @@ msg_res_raiz:   .asciiz "A raiz quadrada de "
 msg_res_igual:  .asciiz " é igual a "
 msg_space:      .asciiz ", "
 msg_erro:       .asciiz "Parâmetro(s) inválido(s).\n\n"
+msg_overflow:   .asciiz "O resultado é um número muito grande, e não pode ser calculado.\n\n"
 		.align 2
 float_zero:     .float 0.0
 
@@ -171,6 +172,11 @@ potencia:
 		bgt $t0, $s1, potencia_while_fim
 		
 		mult $a0, $s0
+		
+		#Verifica overflow
+		mfhi $t1
+		bnez $t1, overflow
+		
 		mflo $a0
 		
 		addi $t0, $t0, 1      # $t0++ ou $t0 = $t0 + 1
@@ -765,9 +771,20 @@ ler_alt:
 	
 	jr $ra
 
+###########################
+#### Mensagem de erro #####
+###########################
+
 erro:
 	li $v0, 4
 	la $a0, msg_erro
+	syscall
+	
+	j menu
+
+overflow:
+	li $v0, 4
+	la $a0, msg_overflow
 	syscall
 	
 	j menu
